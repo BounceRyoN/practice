@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>TOP画面</title>
+
+		<link href="/css/style.css" rel="stylesheet" type="text/css">
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+		<script src="/js/note.js"></script>
+	</head>
+	<body>
+		<header class="title">
+			<h1>掲示板</h1>
+		</header>
+		<main class="main">
+		<form class="message" method="post" action="/add" id="addContent">
+		    <input type="text" name="content" size="20" maxlength="200" class="content"/>
+		    <button type="button" id="submit">投稿</button>
+		</form>
+		<div th:each="content : ${contents}" th:class="'addContent' + ${content.id}">
+
+			<div th:id="'content' + ${content.id}" style="margin: 1rem 0;">
+				<h4 th:text="${content.content}"></h4>
+			</div>
+			<div  style="display:inline;" th:class="'edit' + ${content.id}">
+				<a th:action="@{/Edit/{id}(id=${content.id})}" method="get">
+					<button type="button" th:onclick="|getEditFunk('__${content.id}__')|">編集</button>
+				</a>
+			</div>
+			<form  th:action="@{/Delete/{id}(id=${content.id})}" method="delete" style="display:inline;">
+				<button type="button" th:onclick="|deleteContent('__${content.id}__')|">削除</button>
+			</form>
+			<a th:action="@{/Count/{id}(id=${content.id})}" method="get">
+				<p style="display: inline;"><span th:id="'count' + ${content.id}">0</span></p>
+				<input type="button" th:onclick="|countLike('__${content.id}__')|" value="いいね" style="display:inline">
+			</a>
+		</div>
+		</main>
+	</body>
+</html>
